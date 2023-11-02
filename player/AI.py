@@ -232,67 +232,86 @@ class AI:
             arr.append([y, x, move[0], move[1], mk])
         return arr
 
+    # def calculateb(self, gametiles):
+    #     King = (0, 0)
+    #     king = (0, 0)
+    #     for x in range(8):
+    #         for y in range(8):
+    #             if gametiles[y][x].pieceonTile.tostring() == 'K':
+    #                 King = (y, x)
+    #             if gametiles[y][x].pieceonTile.tostring() == 'k':
+    #                 king = (y, x)
+    #
+    #     value = 0
+    #     for x in range(8):
+    #         for y in range(8):
+    #             if gametiles[y][x].pieceonTile.tostring() == 'P':
+    #                 dist = (y - king[0]) * (y - king[0]) + (x - king[1]) * (x - king[1])
+    #                 value = value - 100 * dist
+    #
+    #             if gametiles[y][x].pieceonTile.tostring() == 'N':
+    #                 dist = (y - king[0]) * (y - king[0]) + (x - king[1]) * (x - king[1])
+    #                 value = value - 350 * dist
+    #
+    #             if gametiles[y][x].pieceonTile.tostring() == 'B':
+    #                 dist = (y - king[0]) * (y - king[0]) + (x - king[1]) * (x - king[1])
+    #                 value = value - 350 * dist
+    #
+    #             if gametiles[y][x].pieceonTile.tostring() == 'R':
+    #                 dist = (y - king[0]) * (y - king[0]) + (x - king[1]) * (x - king[1])
+    #                 value = value - 525 * dist
+    #
+    #             if gametiles[y][x].pieceonTile.tostring() == 'Q':
+    #                 dist = (y - king[0]) * (y - king[0]) + (x - king[1]) * (x - king[1])
+    #                 value = value - 1000 * dist
+    #
+    #             if gametiles[y][x].pieceonTile.tostring() == 'K':
+    #                 dist = (y - king[0]) * (y - king[0]) + (x - king[1]) * (x - king[1])
+    #                 value = value - 10000 * dist
+    #
+    #             if gametiles[y][x].pieceonTile.tostring() == 'p':
+    #                 dist = (y - King[0]) * (y - King[0]) + (x - King[1]) * (x - King[1])
+    #                 value = value + 100 * dist
+    #
+    #             if gametiles[y][x].pieceonTile.tostring() == 'n':
+    #                 dist = (y - King[0]) * (y - King[0]) + (x - King[1]) * (x - King[1])
+    #                 value = value + 350 * dist
+    #
+    #             if gametiles[y][x].pieceonTile.tostring() == 'b':
+    #                 dist = (y - King[0]) * (y - King[0]) + (x - King[1]) * (x - King[1])
+    #                 value = value + 350 * dist
+    #
+    #             if gametiles[y][x].pieceonTile.tostring() == 'r':
+    #                 dist = (y - King[0]) * (y - King[0]) + (x - King[1]) * (x - King[1])
+    #                 value = value + 525 * dist
+    #
+    #             if gametiles[y][x].pieceonTile.tostring() == 'q':
+    #                 dist = (y - King[0]) * (y - King[0]) + (x - King[1]) * (x - King[1])
+    #                 value = value + 1000 * dist
+    #
+    #             if gametiles[y][x].pieceonTile.tostring() == 'k':
+    #                 dist = (y - King[0]) * (y - King[0]) + (x - King[1]) * (x - King[1])
+    #                 value = value + 10000 * dist
+    #
+    #     return value
+
     def calculateb(self, gametiles):
-        King = (0, 0)
-        king = (0, 0)
-        for x in range(8):
-            for y in range(8):
-                if gametiles[y][x].pieceonTile.tostring() == 'K':
-                    King = (y, x)
-                if gametiles[y][x].pieceonTile.tostring() == 'k':
-                    king = (y, x)
+        piece_values = {'P': -100, 'N': -320, 'B': -330, 'R': -500, 'Q': -900, 'K': -20000,
+                        'p': 100, 'n': 320, 'b': 330, 'r': 500, 'q': 900, 'k': 20000}
+
+        positional_adjustments = {
+            'P': lambda x, y: -20 if y == 6 else 0,
+            'N': lambda x, y: 10 if y in [2, 5] and x in [2, 5] else 0,
+        }
 
         value = 0
-        for x in range(8):
-            for y in range(8):
-                if gametiles[y][x].pieceonTile.tostring() == 'P':
-                    dist = (y - king[0]) * (y - king[0]) + (x - king[1]) * (x - king[1])
-                    value = value - 100 * dist
+        for y in range(8):
+            for x in range(8):
+                piece = gametiles[y][x].pieceonTile.tostring()
+                if piece in piece_values:
+                    value += piece_values[piece]
 
-                if gametiles[y][x].pieceonTile.tostring() == 'N':
-                    dist = (y - king[0]) * (y - king[0]) + (x - king[1]) * (x - king[1])
-                    value = value - 350 * dist
-
-                if gametiles[y][x].pieceonTile.tostring() == 'B':
-                    dist = (y - king[0]) * (y - king[0]) + (x - king[1]) * (x - king[1])
-                    value = value - 350 * dist
-
-                if gametiles[y][x].pieceonTile.tostring() == 'R':
-                    dist = (y - king[0]) * (y - king[0]) + (x - king[1]) * (x - king[1])
-                    value = value - 525 * dist
-
-                if gametiles[y][x].pieceonTile.tostring() == 'Q':
-                    dist = (y - king[0]) * (y - king[0]) + (x - king[1]) * (x - king[1])
-                    value = value - 1000 * dist
-
-                if gametiles[y][x].pieceonTile.tostring() == 'K':
-                    dist = (y - king[0]) * (y - king[0]) + (x - king[1]) * (x - king[1])
-                    value = value - 10000 * dist
-
-                if gametiles[y][x].pieceonTile.tostring() == 'p':
-                    dist = (y - King[0]) * (y - King[0]) + (x - King[1]) * (x - King[1])
-                    value = value + 100 * dist
-
-                if gametiles[y][x].pieceonTile.tostring() == 'n':
-                    dist = (y - King[0]) * (y - King[0]) + (x - King[1]) * (x - King[1])
-                    value = value + 350 * dist
-
-                if gametiles[y][x].pieceonTile.tostring() == 'b':
-                    dist = (y - King[0]) * (y - King[0]) + (x - King[1]) * (x - King[1])
-                    value = value + 350 * dist
-
-                if gametiles[y][x].pieceonTile.tostring() == 'r':
-                    dist = (y - King[0]) * (y - King[0]) + (x - King[1]) * (x - King[1])
-                    value = value + 525 * dist
-
-                if gametiles[y][x].pieceonTile.tostring() == 'q':
-                    dist = (y - King[0]) * (y - King[0]) + (x - King[1]) * (x - King[1])
-                    value = value + 1000 * dist
-
-                if gametiles[y][x].pieceonTile.tostring() == 'k':
-                    dist = (y - King[0]) * (y - King[0]) + (x - King[1]) * (x - King[1])
-                    value = value + 10000 * dist
-
+                    value += positional_adjustments.get(piece, lambda x, y: 0)(x, y)
         return value
 
     def move(self, gametiles, y, x, n, m):
